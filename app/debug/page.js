@@ -1,4 +1,5 @@
 // debug.js - Helper untuk debugging login issues
+'use client';
 import { auth, db } from '../../lib/firebase'; // ✅ Sesuai alias bar  // ✅ BENAR (dengan jsconfig/tsconfig)
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 
