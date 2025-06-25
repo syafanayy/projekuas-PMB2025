@@ -1,3 +1,4 @@
+'use client';
 import { auth, db } from '../../lib/firebase'; // ✅ Sesuai alias bar  // ✅ BENAR (dengan jsconfig/tsconfig)
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
