@@ -1,5 +1,5 @@
 async function getExternalPosts() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://your-app-name.vercel.app';
     
     try {
       const response = await fetch(`${baseUrl}/api/external/posts?limit=10`, {

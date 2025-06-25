@@ -1,11 +1,12 @@
-"use client";
+'use client';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function UnauthorizedPage() {
-  const { data: session, status } = useSession();
+  const sessionHook = typeof window !== "undefined" ? useSession() : { data: null, status: 'unauthenticated' };
+  const { data: session, status } = sessionHook;
   const router = useRouter();
 
   const handleGoBack = () => {
