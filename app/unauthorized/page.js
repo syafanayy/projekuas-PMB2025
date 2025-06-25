@@ -1,12 +1,23 @@
-// app/unauthorized/page.js
 "use client";
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function UnauthorizedPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  // Loading state
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-orange-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleGoBack = () => {
     if (session?.user?.role === 'admin') {
@@ -40,13 +51,13 @@ export default function UnauthorizedPage() {
         </p>
 
         {/* User Info */}
-        {session && (
+        {session?.user && (
           <div className="bg-red-800/30 border border-red-600/30 rounded-lg p-4 mb-6 text-left">
             <h3 className="font-semibold mb-2 text-red-200">Informasi Akun Anda:</h3>
             <div className="space-y-1 text-sm">
-              <p>👤 <span className="text-blue-300">Username:</span> {session.user.username}</p>
-              <p>📧 <span className="text-green-300">Email:</span> {session.user.email}</p>
-              <p>🏷️ <span className="text-purple-300">Role:</span> {session.user.role}</p>
+              <p>👤 <span className="text-blue-300">Username:</span> {session.user.username || 'N/A'}</p>
+              <p>📧 <span className="text-green-300">Email:</span> {session.user.email || 'N/A'}</p>
+              <p>🏷️ <span className="text-purple-300">Role:</span> {session.user.role || 'N/A'}</p>
             </div>
           </div>
         )}
@@ -63,12 +74,14 @@ export default function UnauthorizedPage() {
 
         {/* Action Buttons */}
         <div className="space-y-3">
-          <button
-            onClick={handleGoBack}
-            className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            🏠 Kembali ke Area Anda
-          </button>
+          {session && (
+            <button
+              onClick={handleGoBack}
+              className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              🏠 Kembali ke Area Anda
+            </button>
+          )}
           
           <Link 
             href="/"
@@ -77,12 +90,14 @@ export default function UnauthorizedPage() {
             🌐 Ke Beranda
           </Link>
           
-          <button
-            onClick={handleLogout}
-            className="w-full bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            🚪 Logout
-          </button>
+          {session && (
+            <button
+              onClick={handleLogout}
+              className="w-full bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              🚪 Logout
+            </button>
+          )}
         </div>
 
         {/* Role Info */}
@@ -93,6 +108,15 @@ export default function UnauthorizedPage() {
             <p><span className="text-blue-300">User:</span> Akses ke /profile dan area user</p>
           </div>
         </div>
+
+        {/* No Session Warning */}
+        {!session && (
+          <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-yellow-200 text-sm">
+              ⚠️ Anda belum login. Silakan login terlebih dahulu.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
