@@ -2,22 +2,11 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function UnauthorizedPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  // Loading state
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-orange-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   const handleGoBack = () => {
     if (session?.user?.role === 'admin') {
@@ -32,6 +21,18 @@ export default function UnauthorizedPage() {
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
   };
+
+  // Show loading state while session is being determined
+  if (isLoading || status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-orange-900 text-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-red-900/30 backdrop-blur-xl border border-red-500/30 rounded-2xl p-8 text-center">
+          <div className="animate-spin text-4xl mb-4">⏳</div>
+          <p className="text-red-100">Memuat...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-orange-900 text-white flex items-center justify-center p-4">
@@ -51,7 +52,7 @@ export default function UnauthorizedPage() {
         </p>
 
         {/* User Info */}
-        {session?.user && (
+        {session && (
           <div className="bg-red-800/30 border border-red-600/30 rounded-lg p-4 mb-6 text-left">
             <h3 className="font-semibold mb-2 text-red-200">Informasi Akun Anda:</h3>
             <div className="space-y-1 text-sm">

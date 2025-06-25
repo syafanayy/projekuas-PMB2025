@@ -1,4 +1,3 @@
-// lib/auth.js - Enhanced Authentication Service
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc, collection, query, where, getDocs, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "./firebase"; // ← DIPERBAIKI: dari "../firebase" menjadi "./firebase"
